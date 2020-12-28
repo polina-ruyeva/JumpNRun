@@ -19,7 +19,7 @@ class Player{
     strokeWeight(2);
     imageMode(CORNER); 
     image(player_img, pos.x,pos.y,r*2,r*2);
-    image(platform_img, 20, height-100,500,100);
+    //image(platform_img, 20, height-100,500,100);
     
   }
   

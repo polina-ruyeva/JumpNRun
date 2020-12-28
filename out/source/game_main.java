@@ -18,6 +18,7 @@ Player player_var;
 PImage player_img;
 PImage platform_img;
 PImage tree_img;
+ PImage img;
 
 PVector gravity = new PVector(0, 0.25f);
 
@@ -31,13 +32,22 @@ int highScore = 0;
 
 int widthScreen = 1200;
 
+// 
+int xStep;
+float backgroundMove = 0;
+
 public void setup()
 {
   
   player_var = new Player();
   player_img = loadImage("texture\\player_img.jpg");
-  platform_img = loadImage("texture\\platform.png");
+  platform_img = loadImage("texture\\platform_v1.png");
   tree_img = loadImage("texture\\tree.png");
+   img = loadImage("texture\\background.jpg");
+
+  //
+  //xStep = int(widthScreen/platform_img.width); // width?
+  //print(xStep);
 }
 
 public void draw()
@@ -76,7 +86,7 @@ public void startScreen()
 }
 
 public void game(){
-  
+
   if (running){
     if(random(1) < 0.5f && frameCount % 80 == 0) // Speed and distance
         {
@@ -95,6 +105,20 @@ public void game(){
   }
   
   background(153,50,204);
+
+
+  /*for(int i=0; i<4; i++){
+    image(platform_img, platform_img.width*i + backgroundMove, height-platform_img.height);
+    backgroundMove = backgroundMove  -1;
+    if (backgroundMove < (-1*platform_img.width)){ 
+      backgroundMove = 0;
+    }
+  }*/
+   int x = frameCount % img.width;
+  for (int i = -2*x ; i < width ; i += img.width) {
+    copy(img, 0, 0, img.width, height, i, 0, img.width, height);
+  }
+
     text("High Score: ", width/1.5f, 50);
     text(highScore, width/1.2f, 50);
     text("Score: ", width/3, 50);
@@ -102,7 +126,9 @@ public void game(){
 
   player_var.update();
   player_var.show();
-  
+
+  //
+
   for(int i= blocks.size() - 1; i >= 0; i--)
   {
     Block blk = blocks.get(i);
@@ -195,7 +221,7 @@ class Player{
     strokeWeight(2);
     imageMode(CORNER); 
     image(player_img, pos.x,pos.y,r*2,r*2);
-    image(platform_img, 20, height-100,500,100);
+    //image(platform_img, 20, height-100,500,100);
     
   }
   

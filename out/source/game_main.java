@@ -3,6 +3,7 @@ import processing.data.*;
 import processing.event.*; 
 import processing.opengl.*; 
 
+import processing.sound.*; 
 import gifAnimation.*; 
 
 import java.util.HashMap; 
@@ -23,14 +24,20 @@ PImage tree_img;
 PImage background_img;
 PImage img;
 
+String audioName = "Winds Of Stories.mp3";
+String path;
 
 
+
+
+SoundFile backgroundSound;
 
 Gif myAnimation;
+Gif enemyAnimation;
 
 PVector gravity = new PVector(0, 0.25f);
 
-ArrayList <Block> blocks = new ArrayList<Block>();  
+ArrayList <Enemy> enemies = new ArrayList<Enemy>();  
 
 boolean running = false;
 boolean gameOver = false;
@@ -51,10 +58,16 @@ public void setup()
   player_img = loadImage("texture\\player_img.jpg");
   platform_img = loadImage("texture\\platform_v1.png");
   tree_img = loadImage("texture\\tree.png");
-  img = loadImage("texture\\background.jpg");
+  img = loadImage("texture\\background_v3.png");
 
   myAnimation = new Gif(this, "texture\\run_v2.gif");
   myAnimation.play();
+
+  enemyAnimation = new Gif(this, "texture\\enemy_run.gif");
+  enemyAnimation.play();
+
+  backgroundSound = new SoundFile(this, "sound\\Winds Of Stories.wav");
+  backgroundSound.play();
 }
 
 public void draw()
@@ -97,14 +110,14 @@ public void game(){
   if (running){
     if(random(1) < 0.5f && frameCount % 80 == 0) // Speed and distance
         {
-          blocks.add(new Block()); 
+          enemies.add(new Enemy()); 
         }
   }
   
   if(keyPressed)
   {
     
-      if(player_var.pos.y == height-170)
+      if(player_var.pos.y == height-210)
         {
           PVector up = new PVector(0,-100);
           player_var.applyAcc(up); 
@@ -135,9 +148,9 @@ public void game(){
   player_var.update();
   player_var.show();
 
-  for(int i= blocks.size() - 1; i >= 0; i--)
+  for(int i= enemies.size() - 1; i >= 0; i--)
   {
-    Block blk = blocks.get(i);
+    Enemy blk = enemies.get(i);
     blk.update();
     blk.show();
 
@@ -147,7 +160,7 @@ public void game(){
 
     if(blk.x < -blk.width)
     {
-      blocks.remove(i);
+      enemies.remove(i);
       score++;
     }
   }
@@ -156,8 +169,8 @@ public void game(){
 }
 
   public void gameOverScreen(){
-    for(int i= blocks.size() - 1; i >= 0; i--){
-       blocks.remove(i);
+    for(int i= enemies.size() - 1; i >= 0; i--){
+       enemies.remove(i);
     }
     background(255,0,0);
     textSize (70);
@@ -172,17 +185,17 @@ public void game(){
       score = 0;
     }
   }
-class Block
+class Enemy
 {
   float bottom;
   
-  float width = 45;
+  float width = 70;
   float x; 
   float speed = 4;
   
-  Block()
+  Enemy()
   {
-    bottom = random(140, 150); 
+    bottom = random(140, 160); 
     x = widthScreen + width; 
   }
   
@@ -202,7 +215,8 @@ class Block
       stroke(0,0,0);
       strokeWeight(2);
       imageMode(CORNER); 
-      image(tree_img, x, height - bottom, width, bottom - 80);
+      //image(tree_img, x, height - bottom, width, bottom - 80);
+      image(enemyAnimation, x, height - bottom, width, bottom - 80);
     }
 }
 }
@@ -215,7 +229,7 @@ class Player{
   
   Player()
       {
-        pos = new PVector(50,(height-100));
+        pos = new PVector(50,(height-350));
         vel = new PVector(0, 20);
         acc = new PVector();
       }
@@ -242,9 +256,9 @@ class Player{
     applyAcc(gravity);
     pos.add(vel);
 
-    if(pos.y >= height-170) 
+    if(pos.y >= height-210) 
       {
-          pos.y=height-170;
+          pos.y=height-210;
           vel.mult(0);
       }
    

@@ -1,14 +1,14 @@
-class Block
+class Enemy
 {
   float bottom;
   
-  float width = 45;
+  float width = 70;
   float x; 
   float speed = 4;
   
-  Block()
+  Enemy()
   {
-    bottom = random(140, 150); 
+    bottom = random(140, 160); 
     x = widthScreen + width; 
   }
   
@@ -28,7 +28,8 @@ class Block
       stroke(0,0,0);
       strokeWeight(2);
       imageMode(CORNER); 
-      image(tree_img, x, height - bottom, width, bottom - 80);
+      //image(tree_img, x, height - bottom, width, bottom - 80);
+      image(enemyAnimation, x, height - bottom, width, bottom - 80);
     }
 }
 }

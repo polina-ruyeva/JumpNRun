@@ -7,7 +7,7 @@ class Player{
   
   Player()
       {
-        pos = new PVector(50,(height-100));
+        pos = new PVector(50,(height-350));
         vel = new PVector(0, 20);
         acc = new PVector();
       }
@@ -34,9 +34,9 @@ class Player{
     applyAcc(gravity);
     pos.add(vel);
 
-    if(pos.y >= height-170) 
+    if(pos.y >= height-210) 
       {
-          pos.y=height-170;
+          pos.y=height-210;
           vel.mult(0);
       }
    

@@ -5,14 +5,20 @@ PImage tree_img;
 PImage background_img;
 PImage img;
 
+String audioName = "Winds Of Stories.mp3";
+String path;
 
+import processing.sound.*;
 import gifAnimation.*;
 
+SoundFile backgroundSound;
+
 Gif myAnimation;
+Gif enemyAnimation;
 
 PVector gravity = new PVector(0, 0.25);
 
-ArrayList <Block> blocks = new ArrayList<Block>();  
+ArrayList <Enemy> enemies = new ArrayList<Enemy>();  
 
 boolean running = false;
 boolean gameOver = false;
@@ -33,10 +39,16 @@ void setup()
   player_img = loadImage("texture\\player_img.jpg");
   platform_img = loadImage("texture\\platform_v1.png");
   tree_img = loadImage("texture\\tree.png");
-  img = loadImage("texture\\background.jpg");
+  img = loadImage("texture\\background_v3.png");
 
   myAnimation = new Gif(this, "texture\\run_v2.gif");
   myAnimation.play();
+
+  enemyAnimation = new Gif(this, "texture\\enemy_run.gif");
+  enemyAnimation.play();
+
+  backgroundSound = new SoundFile(this, "sound\\Winds Of Stories.wav");
+  backgroundSound.play();
 }
 
 void draw()
@@ -79,14 +91,14 @@ void game(){
   if (running){
     if(random(1) < 0.5 && frameCount % 80 == 0) // Speed and distance
         {
-          blocks.add(new Block()); 
+          enemies.add(new Enemy()); 
         }
   }
   
   if(keyPressed)
   {
     
-      if(player_var.pos.y == height-170)
+      if(player_var.pos.y == height-210)
         {
           PVector up = new PVector(0,-100);
           player_var.applyAcc(up); 
@@ -117,9 +129,9 @@ void game(){
   player_var.update();
   player_var.show();
 
-  for(int i= blocks.size() - 1; i >= 0; i--)
+  for(int i= enemies.size() - 1; i >= 0; i--)
   {
-    Block blk = blocks.get(i);
+    Enemy blk = enemies.get(i);
     blk.update();
     blk.show();
 
@@ -129,7 +141,7 @@ void game(){
 
     if(blk.x < -blk.width)
     {
-      blocks.remove(i);
+      enemies.remove(i);
       score++;
     }
   }
@@ -138,8 +150,8 @@ void game(){
 }
 
   void gameOverScreen(){
-    for(int i= blocks.size() - 1; i >= 0; i--){
-       blocks.remove(i);
+    for(int i= enemies.size() - 1; i >= 0; i--){
+       enemies.remove(i);
     }
     background(255,0,0);
     textSize (70);

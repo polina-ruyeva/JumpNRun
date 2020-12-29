@@ -3,6 +3,8 @@ import processing.data.*;
 import processing.event.*; 
 import processing.opengl.*; 
 
+import gifAnimation.*; 
+
 import java.util.HashMap; 
 import java.util.ArrayList; 
 import java.io.File; 
@@ -18,7 +20,13 @@ Player player_var;
 PImage player_img;
 PImage platform_img;
 PImage tree_img;
- PImage img;
+PImage background_img;
+PImage img;
+
+
+
+
+Gif myAnimation;
 
 PVector gravity = new PVector(0, 0.25f);
 
@@ -33,8 +41,8 @@ int highScore = 0;
 int widthScreen = 1200;
 
 // 
-int xStep;
-float backgroundMove = 0;
+//int xStep;
+//float backgroundMove = 0;
 
 public void setup()
 {
@@ -43,11 +51,10 @@ public void setup()
   player_img = loadImage("texture\\player_img.jpg");
   platform_img = loadImage("texture\\platform_v1.png");
   tree_img = loadImage("texture\\tree.png");
-   img = loadImage("texture\\background.jpg");
+  img = loadImage("texture\\background.jpg");
 
-  //
-  //xStep = int(widthScreen/platform_img.width); // width?
-  //print(xStep);
+  myAnimation = new Gif(this, "texture\\run_v2.gif");
+  myAnimation.play();
 }
 
 public void draw()
@@ -114,20 +121,19 @@ public void game(){
       backgroundMove = 0;
     }
   }*/
-   int x = frameCount % img.width;
+
+
+  int x = frameCount % img.width;
   for (int i = -2*x ; i < width ; i += img.width) {
     copy(img, 0, 0, img.width, height, i, 0, img.width, height);
   }
-
-    text("High Score: ", width/1.5f, 50);
-    text(highScore, width/1.2f, 50);
-    text("Score: ", width/3, 50);
-    text(score, width/2.5f, 50);
+  text("High Score: ", width/1.5f, 50);
+  text(highScore, width/1.2f, 50);
+  text("Score: ", width/3, 50);
+  text(score, width/2.5f, 50);
 
   player_var.update();
   player_var.show();
-
-  //
 
   for(int i= blocks.size() - 1; i >= 0; i--)
   {
@@ -205,11 +211,11 @@ class Player{
   PVector acc;
   PVector vel; 
 
-  float r=40; 
+  float r=100; 
   
   Player()
       {
-        pos = new PVector(50,(height-250));
+        pos = new PVector(50,(height-100));
         vel = new PVector(0, 20);
         acc = new PVector();
       }
@@ -220,9 +226,10 @@ class Player{
     stroke(0,0,0);
     strokeWeight(2);
     imageMode(CORNER); 
-    image(player_img, pos.x,pos.y,r*2,r*2);
+    //image(player_img, pos.x,pos.y,r*2,r*2);
     //image(platform_img, 20, height-100,500,100);
-    
+    image(myAnimation,pos.x,pos.y,r*2,r*2);
+    //image(myAnimation,20,20);
   }
   
   public void applyAcc(PVector acceleration) 

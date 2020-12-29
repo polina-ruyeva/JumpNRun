@@ -2,7 +2,13 @@ Player player_var;
 PImage player_img;
 PImage platform_img;
 PImage tree_img;
- PImage img;
+PImage background_img;
+PImage img;
+
+
+import gifAnimation.*;
+
+Gif myAnimation;
 
 PVector gravity = new PVector(0, 0.25);
 
@@ -27,7 +33,10 @@ void setup()
   player_img = loadImage("texture\\player_img.jpg");
   platform_img = loadImage("texture\\platform_v1.png");
   tree_img = loadImage("texture\\tree.png");
-  background_img = loadImage("texture\\background.jpg");
+  img = loadImage("texture\\background.jpg");
+
+  myAnimation = new Gif(this, "texture\\run_v2.gif");
+  myAnimation.play();
 }
 
 void draw()
@@ -100,7 +109,6 @@ void game(){
   for (int i = -2*x ; i < width ; i += img.width) {
     copy(img, 0, 0, img.width, height, i, 0, img.width, height);
   }
-
   text("High Score: ", width/1.5, 50);
   text(highScore, width/1.2, 50);
   text("Score: ", width/3, 50);

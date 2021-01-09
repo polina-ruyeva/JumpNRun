@@ -24,9 +24,6 @@ PImage tree_img;
 PImage background_img;
 PImage img;
 
-String audioName = "Winds Of Stories.mp3";
-String path;
-
 
 
 
@@ -34,6 +31,7 @@ SoundFile backgroundSound;
 
 Gif myAnimation;
 Gif enemyAnimation;
+Gif santaIntroAnimation;
 
 PVector gravity = new PVector(0, 0.25f);
 
@@ -46,10 +44,6 @@ int score = 0;
 int highScore = 0;
 
 int widthScreen = 1200;
-
-// 
-//int xStep;
-//float backgroundMove = 0;
 
 public void setup()
 {
@@ -68,6 +62,9 @@ public void setup()
 
   backgroundSound = new SoundFile(this, "sound\\Winds Of Stories.wav");
   backgroundSound.play();
+
+  santaIntroAnimation = new Gif(this, "texture\\santa_intro.gif");
+  santaIntroAnimation.play();
 }
 
 public void draw()
@@ -97,6 +94,9 @@ public void startScreen()
     text("High Score: ", width/1.5f, 50);
     text(highScore, width/1.2f, 50);
 
+    imageMode(CORNER);
+    image(santaIntroAnimation, width/1.5f, 200, 400, 400);
+
     if (keyPressed){
       if (key == 's' || key == 'S'){
         running = true;
@@ -116,34 +116,21 @@ public void game(){
   
   if(keyPressed)
   {
-    
-      if(player_var.pos.y == height-210)
-        {
-          PVector up = new PVector(0,-100);
-          player_var.applyAcc(up); 
-        }
+    if(player_var.pos.y == height-210)
+      {
+        PVector up = new PVector(0,-100);
+        player_var.applyAcc(up); 
+      }
   }
   
   background(153,50,204);
-
-
-  /*for(int i=0; i<4; i++){
-    image(platform_img, platform_img.width*i + backgroundMove, height-platform_img.height);
-    backgroundMove = backgroundMove  -1;
-    if (backgroundMove < (-1*platform_img.width)){ 
-      backgroundMove = 0;
-    }
-  }*/
-
 
   int x = frameCount % img.width;
   for (int i = -2*x ; i < width ; i += img.width) {
     copy(img, 0, 0, img.width, height, i, 0, img.width, height);
   }
-  text("High Score: ", width/1.5f, 50);
-  text(highScore, width/1.2f, 50);
-  text("Score: ", width/3, 50);
-  text(score, width/2.5f, 50);
+
+  showScores();
 
   player_var.update();
   player_var.show();
@@ -164,27 +151,40 @@ public void game(){
       score++;
     }
   }
-
-
 }
 
-  public void gameOverScreen(){
-    for(int i= enemies.size() - 1; i >= 0; i--){
-       enemies.remove(i);
-    }
-    background(255,0,0);
-    textSize (70);
-    fill(0);
-    text("Game Over", width/3, 200);
-    if (keyPressed){
-      gameOver = false;
-      running = false;
-      if (score > highScore){
-        highScore = score;
-      };
-      score = 0;
-    }
+public void gameOverScreen(){
+  for(int i= enemies.size() - 1; i >= 0; i--){
+      enemies.remove(i);
   }
+  background(255,0,0);
+  textSize (70);
+  fill(0);
+  text("Game Over", width/3, 200);
+  if (keyPressed){
+    gameOver = false;
+    running = false;
+    if (score > highScore){
+      highScore = score;
+    };
+    score = 0;
+  }
+}
+
+public void showScores(){
+  showScore();
+  showHighScore();
+}
+
+public void showScore(){
+  text("Score: ", width/3, 50);
+  text(score, width/2.5f, 50);
+}
+
+public void showHighScore(){
+  text("High Score: ", width/1.5f, 50);
+  text(highScore, width/1.2f, 50);
+}
 class Enemy
 {
   float bottom;

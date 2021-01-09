@@ -69,17 +69,19 @@ public void draw()
 public void startScreen()
 {
     background (255,255,255);
+    
+    background(background_intro);
     textSize (70);
-    fill(0);
-    text("Start game?", width/3, 200);
-    fill(0);
+    fill(255,255,255);
+    text("Start game?", width/12, 150);
     textSize (20);
-    text("Press s to begin", width/3, 250);
+    text("Press s to begin", width/12, 190);
 
     showHighScore();
 
     imageMode(CORNER);
     image(santaIntroAnimation, width/1.5f, 200, 400, 400);
+
 
     if (keyPressed){
       if (key == 's' || key == 'S'){
@@ -176,7 +178,7 @@ public void preload(){
   platform_img = loadImage("texture\\platform_v1.png");
   tree_img = loadImage("texture\\tree.png");
   img = loadImage("texture\\background_v3.png");
-  background_intro = loadImage("texture\\background_intro.jpg");
+  background_intro = loadImage("texture\\background_intro_v2.jpg");
 
   myAnimation = new Gif(this, "texture\\run_v2.gif");
   myAnimation.play();

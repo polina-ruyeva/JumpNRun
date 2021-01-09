@@ -18,10 +18,7 @@ class Player{
     stroke(0,0,0);
     strokeWeight(2);
     imageMode(CORNER); 
-    //image(player_img, pos.x,pos.y,r*2,r*2);
-    //image(platform_img, 20, height-100,500,100);
     image(myAnimation,pos.x,pos.y,r*2,r*2);
-    //image(myAnimation,20,20);
   }
   
   void applyAcc(PVector acceleration) 

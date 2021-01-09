@@ -4,6 +4,7 @@ PImage platform_img;
 PImage tree_img;
 PImage background_img;
 PImage img;
+PImage background_intro;
 
 import processing.sound.*;
 import gifAnimation.*;
@@ -29,23 +30,7 @@ int widthScreen = 1200;
 void setup()
 {
   size(1200,500);
-  player_var = new Player();
-  player_img = loadImage("texture\\player_img.jpg");
-  platform_img = loadImage("texture\\platform_v1.png");
-  tree_img = loadImage("texture\\tree.png");
-  img = loadImage("texture\\background_v3.png");
-
-  myAnimation = new Gif(this, "texture\\run_v2.gif");
-  myAnimation.play();
-
-  enemyAnimation = new Gif(this, "texture\\enemy_run.gif");
-  enemyAnimation.play();
-
-  backgroundSound = new SoundFile(this, "sound\\Winds Of Stories.wav");
-  backgroundSound.play();
-
-  santaIntroAnimation = new Gif(this, "texture\\santa_intro.gif");
-  santaIntroAnimation.play();
+  preload();
 }
 
 void draw()
@@ -72,8 +57,7 @@ void startScreen()
     textSize (20);
     text("Press s to begin", width/3, 250);
 
-    text("High Score: ", width/1.5, 50);
-    text(highScore, width/1.2, 50);
+    showHighScore();
 
     imageMode(CORNER);
     image(santaIntroAnimation, width/1.5, 200, 400, 400);
@@ -165,4 +149,25 @@ void showScore(){
 void showHighScore(){
   text("High Score: ", width/1.5, 50);
   text(highScore, width/1.2, 50);
+}
+
+void preload(){
+  player_var = new Player();
+  player_img = loadImage("texture\\player_img.jpg");
+  platform_img = loadImage("texture\\platform_v1.png");
+  tree_img = loadImage("texture\\tree.png");
+  img = loadImage("texture\\background_v3.png");
+  background_intro = loadImage("texture\\background_intro.jpg");
+
+  myAnimation = new Gif(this, "texture\\run_v2.gif");
+  myAnimation.play();
+
+  enemyAnimation = new Gif(this, "texture\\enemy_run.gif");
+  enemyAnimation.play();
+
+  backgroundSound = new SoundFile(this, "sound\\Winds Of Stories.wav");
+  backgroundSound.play();
+
+  santaIntroAnimation = new Gif(this, "texture\\santa_intro.gif");
+  santaIntroAnimation.play();
 }

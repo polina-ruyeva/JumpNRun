@@ -23,6 +23,7 @@ PImage platform_img;
 PImage tree_img;
 PImage background_img;
 PImage img;
+PImage background_intro;
 
 
 
@@ -48,23 +49,7 @@ int widthScreen = 1200;
 public void setup()
 {
   
-  player_var = new Player();
-  player_img = loadImage("texture\\player_img.jpg");
-  platform_img = loadImage("texture\\platform_v1.png");
-  tree_img = loadImage("texture\\tree.png");
-  img = loadImage("texture\\background_v3.png");
-
-  myAnimation = new Gif(this, "texture\\run_v2.gif");
-  myAnimation.play();
-
-  enemyAnimation = new Gif(this, "texture\\enemy_run.gif");
-  enemyAnimation.play();
-
-  backgroundSound = new SoundFile(this, "sound\\Winds Of Stories.wav");
-  backgroundSound.play();
-
-  santaIntroAnimation = new Gif(this, "texture\\santa_intro.gif");
-  santaIntroAnimation.play();
+  preload();
 }
 
 public void draw()
@@ -91,8 +76,7 @@ public void startScreen()
     textSize (20);
     text("Press s to begin", width/3, 250);
 
-    text("High Score: ", width/1.5f, 50);
-    text(highScore, width/1.2f, 50);
+    showHighScore();
 
     imageMode(CORNER);
     image(santaIntroAnimation, width/1.5f, 200, 400, 400);
@@ -185,6 +169,27 @@ public void showHighScore(){
   text("High Score: ", width/1.5f, 50);
   text(highScore, width/1.2f, 50);
 }
+
+public void preload(){
+  player_var = new Player();
+  player_img = loadImage("texture\\player_img.jpg");
+  platform_img = loadImage("texture\\platform_v1.png");
+  tree_img = loadImage("texture\\tree.png");
+  img = loadImage("texture\\background_v3.png");
+  background_intro = loadImage("texture\\background_intro.jpg");
+
+  myAnimation = new Gif(this, "texture\\run_v2.gif");
+  myAnimation.play();
+
+  enemyAnimation = new Gif(this, "texture\\enemy_run.gif");
+  enemyAnimation.play();
+
+  backgroundSound = new SoundFile(this, "sound\\Winds Of Stories.wav");
+  backgroundSound.play();
+
+  santaIntroAnimation = new Gif(this, "texture\\santa_intro.gif");
+  santaIntroAnimation.play();
+}
 class Enemy
 {
   float bottom;
@@ -240,10 +245,7 @@ class Player{
     stroke(0,0,0);
     strokeWeight(2);
     imageMode(CORNER); 
-    //image(player_img, pos.x,pos.y,r*2,r*2);
-    //image(platform_img, 20, height-100,500,100);
     image(myAnimation,pos.x,pos.y,r*2,r*2);
-    //image(myAnimation,20,20);
   }
   
   public void applyAcc(PVector acceleration) 

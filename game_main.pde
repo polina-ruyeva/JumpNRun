@@ -5,6 +5,7 @@ PImage tree_img;
 PImage background_img;
 PImage img;
 PImage background_intro;
+PImage fireball_img; 
 
 import processing.sound.*;
 import gifAnimation.*;
@@ -18,6 +19,7 @@ Gif santaIntroAnimation;
 PVector gravity = new PVector(0, 0.25);
 
 ArrayList <Enemy> enemies = new ArrayList<Enemy>();  
+ArrayList <Bullet> bullets = new ArrayList<Bullet>();  
 
 boolean running = false;
 boolean gameOver = false;
@@ -83,13 +85,19 @@ void game(){
   
   if(keyPressed)
   {
-    if(player_var.pos.y == height-210)
-      {
-        PVector up = new PVector(0,-100);
-        player_var.applyAcc(up); 
-      }
+    if (key == ' '){
+      if(player_var.pos.y == height-210)
+        {
+          PVector up = new PVector(0,-100);
+          player_var.applyAcc(up); 
+        }
+    }
   }
-  
+  //------
+  if (mousePressed){
+    bullets.add(new Bullet(player_var.pos.x, player_var.pos.y + 40));
+  }
+  //----
   background(153,50,204);
 
   int x = frameCount % img.width;
@@ -101,6 +109,20 @@ void game(){
 
   player_var.update();
   player_var.show();
+  
+  //------
+  for(int i= bullets.size() - 1; i >= 0; i--){
+    Bullet bllt = bullets.get(i);
+    
+    bllt.update();
+    bllt.show();
+
+    if(bllt.x <-bllt.width)
+    {
+      bullets.remove(i);
+    }
+  }
+  //-------
 
   for(int i= enemies.size() - 1; i >= 0; i--)
   {
@@ -112,11 +134,18 @@ void game(){
       gameOver = true;
     }
 
-    if(blk.x < -blk.width)
+    for(int h= bullets.size() - 1; h >= 0; h--){
+      if (blk.hitsBullet(bullets.get(h))){
+        //enemies.remove(i);
+        //bullets.remove(h);
+      }
+    }
+
+   /* if(blk.x < -blk.width)
     {
       enemies.remove(i);
       score++;
-    }
+    }*/
   }
 }
 
@@ -124,10 +153,12 @@ void gameOverScreen(){
   for(int i= enemies.size() - 1; i >= 0; i--){
       enemies.remove(i);
   }
+  
   background(255,0,0);
   textSize (70);
   fill(0);
   text("Game Over", width/3, 200);
+  
   if (keyPressed){
     gameOver = false;
     running = false;
@@ -160,6 +191,7 @@ void preload(){
   tree_img = loadImage("texture\\tree.png");
   img = loadImage("texture\\background_v3.png");
   background_intro = loadImage("texture\\background_intro_v2.jpg");
+  fireball_img = loadImage("texture\\Fireball.png");
 
   myAnimation = new Gif(this, "texture\\run_v2.gif");
   myAnimation.play();

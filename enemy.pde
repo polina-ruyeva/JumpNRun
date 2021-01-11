@@ -1,11 +1,11 @@
 class Enemy
 {
   float bottom;
-  
+
   float width = 70;
   float x; 
   float speed = 4;
-  
+
   Enemy()
   {
     bottom = random(140, 160); 
@@ -15,6 +15,11 @@ class Enemy
   boolean hits(Player player)
   {
     return ((player.pos.x > x) && (player.pos.x < (x + width))) &&  (player.pos.y > (height - bottom - player.r));
+  }
+
+  boolean hitsBullet(Bullet bullet)
+  {
+    return ((bullet.x > x) && (bullet.x < (x + width))) &&  (bullet.y > (height - bottom - bullet.width));
   }
   
   void update(){
@@ -31,5 +36,5 @@ class Enemy
       //image(tree_img, x, height - bottom, width, bottom - 80);
       image(enemyAnimation, x, height - bottom, width, bottom - 80);
     }
-}
+  } 
 }

@@ -24,6 +24,7 @@ PImage tree_img;
 PImage background_img;
 PImage img;
 PImage background_intro;
+PImage fireball_img; 
 
 
 
@@ -37,6 +38,7 @@ Gif santaIntroAnimation;
 PVector gravity = new PVector(0, 0.25f);
 
 ArrayList <Enemy> enemies = new ArrayList<Enemy>();  
+ArrayList <Bullet> bullets = new ArrayList<Bullet>();  
 
 boolean running = false;
 boolean gameOver = false;
@@ -102,13 +104,19 @@ public void game(){
   
   if(keyPressed)
   {
-    if(player_var.pos.y == height-210)
-      {
-        PVector up = new PVector(0,-100);
-        player_var.applyAcc(up); 
-      }
+    if (key == ' '){
+      if(player_var.pos.y == height-210)
+        {
+          PVector up = new PVector(0,-100);
+          player_var.applyAcc(up); 
+        }
+    }
   }
-  
+  //------
+  if (mousePressed){
+    bullets.add(new Bullet(player_var.pos.x, player_var.pos.y + 40));
+  }
+  //----
   background(153,50,204);
 
   int x = frameCount % img.width;
@@ -120,6 +128,20 @@ public void game(){
 
   player_var.update();
   player_var.show();
+  
+  //------
+  for(int i= bullets.size() - 1; i >= 0; i--){
+    Bullet bllt = bullets.get(i);
+    
+    bllt.update();
+    bllt.show();
+
+    if(bllt.x <-bllt.width)
+    {
+      bullets.remove(i);
+    }
+  }
+  //-------
 
   for(int i= enemies.size() - 1; i >= 0; i--)
   {
@@ -131,11 +153,18 @@ public void game(){
       gameOver = true;
     }
 
-    if(blk.x < -blk.width)
+    for(int h= bullets.size() - 1; h >= 0; h--){
+      if (blk.hitsBullet(bullets.get(h))){
+        //enemies.remove(i);
+        //bullets.remove(h);
+      }
+    }
+
+   /* if(blk.x < -blk.width)
     {
       enemies.remove(i);
       score++;
-    }
+    }*/
   }
 }
 
@@ -143,10 +172,12 @@ public void gameOverScreen(){
   for(int i= enemies.size() - 1; i >= 0; i--){
       enemies.remove(i);
   }
+  
   background(255,0,0);
   textSize (70);
   fill(0);
   text("Game Over", width/3, 200);
+  
   if (keyPressed){
     gameOver = false;
     running = false;
@@ -179,6 +210,7 @@ public void preload(){
   tree_img = loadImage("texture\\tree.png");
   img = loadImage("texture\\background_v3.png");
   background_intro = loadImage("texture\\background_intro_v2.jpg");
+  fireball_img = loadImage("texture\\Fireball.png");
 
   myAnimation = new Gif(this, "texture\\run_v2.gif");
   myAnimation.play();
@@ -192,14 +224,37 @@ public void preload(){
   santaIntroAnimation = new Gif(this, "texture\\santa_intro.gif");
   santaIntroAnimation.play();
 }
+class Bullet
+{
+    float x;
+    float y;
+    float speed = 4;
+    float width = 70;
+
+    Bullet(float xpos, float ypos){
+        this.x = xpos;
+        this.y = ypos;
+    }
+
+    public void update(){
+        x += speed;
+    }
+    
+    public void show(){
+        stroke(0,0,0);
+        strokeWeight(2);
+        imageMode(CORNER); 
+        image(fireball_img, this.x, this.y, this.width, this.width);
+    }
+}
 class Enemy
 {
   float bottom;
-  
+
   float width = 70;
   float x; 
   float speed = 4;
-  
+
   Enemy()
   {
     bottom = random(140, 160); 
@@ -209,6 +264,11 @@ class Enemy
   public boolean hits(Player player)
   {
     return ((player.pos.x > x) && (player.pos.x < (x + width))) &&  (player.pos.y > (height - bottom - player.r));
+  }
+
+  public boolean hitsBullet(Bullet bullet)
+  {
+    return ((bullet.x > x) && (bullet.x < (x + width))) &&  (bullet.y > (height - bottom - bullet.width));
   }
   
   public void update(){
@@ -225,7 +285,7 @@ class Enemy
       //image(tree_img, x, height - bottom, width, bottom - 80);
       image(enemyAnimation, x, height - bottom, width, bottom - 80);
     }
-}
+  } 
 }
 class Player{
   PVector pos; 

@@ -26,6 +26,13 @@ boolean gameOver = false;
 
 int score = 0;
 int highScore = 0;
+int coolDown = 0;
+
+int time;
+int timeTillCooldown = 15;
+int wait = 1000;
+int startCountdownTime;
+boolean tick;
 
 int widthScreen = 1200;
 
@@ -33,6 +40,10 @@ void setup()
 {
   size(1200,500);
   preload();
+
+  time = millis(); //store the current time
+  smooth();
+  strokeWeight(3);
 }
 
 void draw()
@@ -69,12 +80,14 @@ void startScreen()
     if (keyPressed){
       if (key == 's' || key == 'S'){
         running = true;
+        startCountdownTime = millis();
       }
     }
     
 }
 
 void game(){
+
 
   if (running){
     if(random(1) < 0.5 && frameCount % 80 == 0) // Speed and distance
@@ -95,7 +108,12 @@ void game(){
   }
   //------
   if (mousePressed){
-    bullets.add(new Bullet(player_var.pos.x, player_var.pos.y + 40));
+    if (timeTillCooldown == 0){ 
+      bullets.add(new Bullet(player_var.pos.x, player_var.pos.y + 40));
+      timeTillCooldown = 15;
+      startCountdownTime = millis();
+      time = 0;
+    }
   }
   //----
   background(153,50,204);
@@ -104,6 +122,18 @@ void game(){
   for (int i = -2*x ; i < width ; i += img.width) {
     copy(img, 0, 0, img.width, height, i, 0, img.width, height);
   }
+
+  // ----
+   //(if(millis() - time >= 1000){
+   //also update the stored time
+    //timeTillCooldown = 15 - time/1000;
+   if(((millis() -startCountdownTime) - time >= 1000) && (timeTillCooldown > 0)) {
+    time = millis() - startCountdownTime;
+    timeTillCooldown = 15 - time/1000;
+  }
+
+  text(timeTillCooldown, width/7, 50);
+  // ------
 
   showScores();
 
@@ -126,34 +156,49 @@ void game(){
 
   for(int i= enemies.size() - 1; i >= 0; i--)
   {
-    Enemy blk = enemies.get(i);
-    blk.update();
-    blk.show();
+    try {
+      Enemy blk = enemies.get(i);
+      blk.update();
+      blk.show();
 
-    if (blk.hits(player_var)){
-      gameOver = true;
-    }
-
-    for(int h= bullets.size() - 1; h >= 0; h--){
-      if (blk.hitsBullet(bullets.get(h))){
-        //enemies.remove(i);
-        //bullets.remove(h);
+      if (blk.hits(player_var)){
+        gameOver = true;
       }
+
+      checkForEnemyHitsBullet(blk, i); 
+
+      if(blk.x < -blk.width){
+        enemies.remove(i);
+        score++;
+        if (coolDown > 0){
+          coolDown --;
+        }
+      }    
+    } catch (Exception e) {
+      
+    } finally {
+      
     }
 
-   /* if(blk.x < -blk.width)
-    {
-      enemies.remove(i);
-      score++;
-    }*/
   }
+}
+
+void checkForEnemyHitsBullet(Enemy enemy, int currentEnemyInArray){
+  for(int h= bullets.size() - 1; h >= 0; h--){
+    if (enemy.hitsBullet(bullets.get(h))){
+      bullets.remove(h);
+      enemies.remove(currentEnemyInArray);
+    }
+  } 
 }
 
 void gameOverScreen(){
   for(int i= enemies.size() - 1; i >= 0; i--){
       enemies.remove(i);
   }
-  
+  timeTillCooldown = 15;
+  time = 0;
+
   background(255,0,0);
   textSize (70);
   fill(0);

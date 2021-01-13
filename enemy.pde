@@ -6,9 +6,8 @@ class Enemy
   float x; 
   float speed = 4;
 
-  Enemy()
-  {
-    bottom = random(140, 160); 
+  Enemy(){
+    bottom = random(140, 145); 
     x = widthScreen + width; 
   }
   

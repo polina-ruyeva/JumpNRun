@@ -32,8 +32,12 @@ class Enemy
       stroke(0,0,0);
       strokeWeight(2);
       imageMode(CORNER); 
-      //image(tree_img, x, height - bottom, width, bottom - 80);
       image(enemyAnimation, x, height - bottom, width, bottom - 80);
     }
   } 
+
+  void death(){
+    imageMode(CORNER);
+    image(enemyDeathAnimation, x, height - bottom, width, bottom - 80);
+  }
 }

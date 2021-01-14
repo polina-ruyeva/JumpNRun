@@ -18,7 +18,7 @@ class Player{
     stroke(0,0,0);
     strokeWeight(2);
     imageMode(CORNER); 
-    image(myAnimation,pos.x,pos.y,r*2,r*2);
+    image(santaAnimation,pos.x,pos.y,r*2,r*2);
   }
   
   void applyAcc(PVector acceleration) 

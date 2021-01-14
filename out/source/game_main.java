@@ -20,20 +20,21 @@ public class game_main extends PApplet {
 Player player_var;
 PImage player_img;
 PImage platform_img;
-PImage tree_img;
 PImage background_img;
 PImage img;
 PImage background_intro;
 PImage fireball_img; 
+PImage highScore_img;
 
 
 
 
 SoundFile backgroundSound;
 
-Gif myAnimation;
+Gif santaAnimation;
 Gif enemyAnimation;
 Gif santaIntroAnimation;
+Gif enemyDeathAnimation;
 
 PVector gravity = new PVector(0, 0.25f);
 
@@ -52,6 +53,10 @@ int timeTillCooldown = 15;
 int wait = 1000;
 int startCountdownTime;
 boolean tick;
+
+boolean newHighScore = false;
+
+Delay delay;
 
 int widthScreen = 1200;
 
@@ -142,18 +147,12 @@ public void game(){
     copy(img, 0, 0, img.width, height, i, 0, img.width, height);
   }
 
-  // ----
-   //(if(millis() - time >= 1000){
-   //also update the stored time
-    //timeTillCooldown = 15 - time/1000;
-   if(((millis() -startCountdownTime) - time >= 1000) && (timeTillCooldown > 0)) {
+  if(((millis() -startCountdownTime) - time >= 1000) && (timeTillCooldown > 0)) {
     time = millis() - startCountdownTime;
     timeTillCooldown = 15 - time/1000;
   }
- 
-  //text(15 - millis()/1000, width/7, 50);
+  text("Countdown: ", width/25, 50);
   text(timeTillCooldown, width/7, 50);
-  // ------
 
   showScores();
 
@@ -219,18 +218,34 @@ public void gameOverScreen(){
   timeTillCooldown = 15;
   time = 0;
 
-  background(255,0,0);
+  background(0xffbf2020);
   textSize (70);
-  fill(0);
+  fill(255,255,255);
   text("Game Over", width/3, 200);
+  textSize(30);
+
+  if (score > highScore){
+    highScore = score;
+    newHighScore = true;
+  }
+
+  if (newHighScore == true){
+    imageMode(CORNER); 
+    image(highScore_img, width/1.4f, 0, 250, 250);
+  }
+
+  text("Your current score: ", width/3, 250);
+  text(score, width/1.6f, 250);
+  text("Your high score: ", width/3, 300);
+  text(highScore, width/1.6f, 300);
+
+  text("Press any button to try it again", width/3.3f, 400);
   
   if (keyPressed){
     gameOver = false;
     running = false;
-    if (score > highScore){
-      highScore = score;
-    };
     score = 0;
+    newHighScore = false;
   }
 }
 
@@ -251,15 +266,13 @@ public void showHighScore(){
 
 public void preload(){
   player_var = new Player();
-  player_img = loadImage("texture\\player_img.jpg");
-  platform_img = loadImage("texture\\platform_v1.png");
-  tree_img = loadImage("texture\\tree.png");
-  img = loadImage("texture\\background_v3.png");
+  img = loadImage("texture\\background_v4.png");
   background_intro = loadImage("texture\\background_intro_v2.jpg");
   fireball_img = loadImage("texture\\Fireball.png");
+  highScore_img = loadImage("texture\\high_score_v3.png");
 
-  myAnimation = new Gif(this, "texture\\run_v2.gif");
-  myAnimation.play();
+  santaAnimation = new Gif(this, "texture\\run_v2.gif");
+  santaAnimation.play();
 
   enemyAnimation = new Gif(this, "texture\\enemy_run.gif");
   enemyAnimation.play();
@@ -269,6 +282,9 @@ public void preload(){
 
   santaIntroAnimation = new Gif(this, "texture\\santa_intro.gif");
   santaIntroAnimation.play();
+
+  enemyDeathAnimation = new Gif(this, "texture\\enemy_death.gif");
+  enemyDeathAnimation.play();
 }
 class Bullet
 {
@@ -327,10 +343,14 @@ class Enemy
       stroke(0,0,0);
       strokeWeight(2);
       imageMode(CORNER); 
-      //image(tree_img, x, height - bottom, width, bottom - 80);
       image(enemyAnimation, x, height - bottom, width, bottom - 80);
     }
   } 
+
+  public void death(){
+    imageMode(CORNER);
+    image(enemyDeathAnimation, x, height - bottom, width, bottom - 80);
+  }
 }
 class Player{
   PVector pos; 
@@ -352,7 +372,7 @@ class Player{
     stroke(0,0,0);
     strokeWeight(2);
     imageMode(CORNER); 
-    image(myAnimation,pos.x,pos.y,r*2,r*2);
+    image(santaAnimation,pos.x,pos.y,r*2,r*2);
   }
   
   public void applyAcc(PVector acceleration) 

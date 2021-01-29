@@ -88,12 +88,9 @@ void startScreen()
         startCountdownTime = millis();
       }
     }
-    
 }
 
 void game(){
-
-
   if (running){
     if(random(1) < 0.5 && frameCount % 80 == 0) // Speed and distance
         {

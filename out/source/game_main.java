@@ -107,12 +107,9 @@ public void startScreen()
         startCountdownTime = millis();
       }
     }
-    
 }
 
 public void game(){
-
-
   if (running){
     if(random(1) < 0.5f && frameCount % 80 == 0) // Speed and distance
         {
@@ -360,11 +357,11 @@ class Player{
   float r=100; 
   
   Player()
-      {
-        pos = new PVector(50,(height-350));
-        vel = new PVector(0, 20);
-        acc = new PVector();
-      }
+  {
+    pos = new PVector(50,(height-350));
+    vel = new PVector(0, 20);
+    acc = new PVector();
+  }
       
   public void show()
   {

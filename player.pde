@@ -6,11 +6,11 @@ class Player{
   float r=100; 
   
   Player()
-      {
-        pos = new PVector(50,(height-350));
-        vel = new PVector(0, 20);
-        acc = new PVector();
-      }
+  {
+    pos = new PVector(50,(height-350));
+    vel = new PVector(0, 20);
+    acc = new PVector();
+  }
       
   void show()
   {

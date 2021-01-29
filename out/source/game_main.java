@@ -20,7 +20,6 @@ public class game_main extends PApplet {
 Player player_var;
 PImage player_img;
 PImage platform_img;
-PImage background_img;
 PImage img;
 PImage background_intro;
 PImage fireball_img; 
@@ -52,7 +51,6 @@ int time;
 int timeTillCooldown = 15;
 int wait = 1000;
 int startCountdownTime;
-boolean tick;
 
 boolean newHighScore = false;
 
@@ -110,13 +108,11 @@ public void startScreen()
 }
 
 public void game(){
-  if (running){
-    if(random(1) < 0.5f && frameCount % 80 == 0) // Speed and distance
-        {
-          enemies.add(new Enemy()); 
-        }
+  if(random(1) < 0.5f && frameCount % 80 == 0) // Speed and distance
+  {
+    enemies.add(new Enemy()); 
   }
-  
+
   if(keyPressed)
   {
     if (key == ' '){
@@ -127,7 +123,7 @@ public void game(){
         }
     }
   }
-  //------
+
   if (mousePressed){
     if (timeTillCooldown == 0){ 
       bullets.add(new Bullet(player_var.pos.x, player_var.pos.y + 40));
@@ -136,7 +132,7 @@ public void game(){
       time = 0;
     }
   }
-  //----
+
   background(153,50,204);
 
   int x = frameCount % img.width;
@@ -148,6 +144,7 @@ public void game(){
     time = millis() - startCountdownTime;
     timeTillCooldown = 15 - time/1000;
   }
+
   text("Countdown: ", width/25, 50);
   text(timeTillCooldown, width/7, 50);
 
@@ -156,7 +153,6 @@ public void game(){
   player_var.update();
   player_var.show();
   
-  //------
   for(int i= bullets.size() - 1; i >= 0; i--){
     Bullet bllt = bullets.get(i);
     
@@ -168,7 +164,6 @@ public void game(){
       bullets.remove(i);
     }
   }
-  //-------
 
   for(int i= enemies.size() - 1; i >= 0; i--)
   {
@@ -330,18 +325,14 @@ class Enemy
   }
   
   public void update(){
-    if(running){
      x -= speed; 
-    }
   }
   
   public void show(){
-    if (running){
       stroke(0,0,0);
       strokeWeight(2);
       imageMode(CORNER); 
       image(enemyAnimation, x, height - bottom, width, bottom - 80);
-    }
   } 
 
   public void death(){

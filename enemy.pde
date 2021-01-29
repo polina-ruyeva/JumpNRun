@@ -22,18 +22,14 @@ class Enemy
   }
   
   void update(){
-    if(running){
      x -= speed; 
-    }
   }
   
   void show(){
-    if (running){
       stroke(0,0,0);
       strokeWeight(2);
       imageMode(CORNER); 
       image(enemyAnimation, x, height - bottom, width, bottom - 80);
-    }
   } 
 
   void death(){

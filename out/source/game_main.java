@@ -45,12 +45,14 @@ boolean gameOver = false;
 
 int score = 0;
 int highScore = 0;
-int coolDown = 0;
+int scoreTillNextLevelUp = 10;
 
 int time;
 int timeTillCooldown = 15;
 int wait = 1000;
 int startCountdownTime;
+
+float currentSpeedEnemy = 4;
 
 boolean newHighScore = false;
 
@@ -181,8 +183,13 @@ public void game(){
       if(blk.x < -blk.width){
         enemies.remove(i);
         score++;
-        if (coolDown > 0){
-          coolDown --;
+        if (scoreTillNextLevelUp > 0){
+          scoreTillNextLevelUp--;
+        } else{
+          if (currentSpeedEnemy < 8){
+            currentSpeedEnemy = currentSpeedEnemy * 1.10f;
+            scoreTillNextLevelUp = 10;
+          }
         }
       }    
     } catch (Exception e) {
@@ -209,6 +216,7 @@ public void gameOverScreen(){
   }
   timeTillCooldown = 15;
   time = 0;
+  currentSpeedEnemy = 4;
 
   background(0xffbf2020);
   textSize (70);
@@ -270,6 +278,7 @@ public void preload(){
   enemyAnimation.play();
 
   backgroundSound = new SoundFile(this, "sound\\Winds Of Stories.wav");
+  backgroundSound.amp(0.1f);
   backgroundSound.play();
 
   santaIntroAnimation = new Gif(this, "texture\\santa_intro.gif");
@@ -307,11 +316,12 @@ class Enemy
 
   float width = 70;
   float x; 
-  float speed = 4;
+  float speed;
 
   Enemy(){
     bottom = random(140, 145); 
     x = widthScreen + width; 
+    speed = currentSpeedEnemy;
   }
   
   public boolean hits(Player player)
@@ -325,7 +335,8 @@ class Enemy
   }
   
   public void update(){
-     x -= speed; 
+    speed = currentSpeedEnemy;
+    x -= speed;
   }
   
   public void show(){

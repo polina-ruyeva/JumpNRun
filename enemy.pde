@@ -4,11 +4,12 @@ class Enemy
 
   float width = 70;
   float x; 
-  float speed = 4;
+  float speed;
 
   Enemy(){
     bottom = random(140, 145); 
     x = widthScreen + width; 
+    speed = currentSpeedEnemy;
   }
   
   boolean hits(Player player)
@@ -22,7 +23,8 @@ class Enemy
   }
   
   void update(){
-     x -= speed; 
+    speed = currentSpeedEnemy;
+    x -= speed;
   }
   
   void show(){

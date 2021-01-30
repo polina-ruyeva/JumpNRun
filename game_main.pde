@@ -26,12 +26,14 @@ boolean gameOver = false;
 
 int score = 0;
 int highScore = 0;
-int coolDown = 0;
+int scoreTillNextLevelUp = 10;
 
 int time;
 int timeTillCooldown = 15;
 int wait = 1000;
 int startCountdownTime;
+
+float currentSpeedEnemy = 4;
 
 boolean newHighScore = false;
 
@@ -162,8 +164,13 @@ void game(){
       if(blk.x < -blk.width){
         enemies.remove(i);
         score++;
-        if (coolDown > 0){
-          coolDown --;
+        if (scoreTillNextLevelUp > 0){
+          scoreTillNextLevelUp--;
+        } else{
+          if (currentSpeedEnemy < 8){
+            currentSpeedEnemy = currentSpeedEnemy * 1.10;
+            scoreTillNextLevelUp = 10;
+          }
         }
       }    
     } catch (Exception e) {
@@ -190,6 +197,7 @@ void gameOverScreen(){
   }
   timeTillCooldown = 15;
   time = 0;
+  currentSpeedEnemy = 4;
 
   background(#bf2020);
   textSize (70);
@@ -251,6 +259,7 @@ void preload(){
   enemyAnimation.play();
 
   backgroundSound = new SoundFile(this, "sound\\Winds Of Stories.wav");
+  backgroundSound.amp(0.1);
   backgroundSound.play();
 
   santaIntroAnimation = new Gif(this, "texture\\santa_intro.gif");

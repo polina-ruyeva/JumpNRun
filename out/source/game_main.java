@@ -65,7 +65,7 @@ public void setup()
   
   preload();
 
-  time = millis(); //store the current time
+  time = millis();
   
   strokeWeight(3);
 }
@@ -80,14 +80,13 @@ public void draw()
     {
       if (gameOver == false){
         game();
-      } else gameOverScreen();
+      } else 
+        gameOverScreen();
     }   
 }
 
 public void startScreen()
-{
-    background (255,255,255);
-    
+{   
     background(background_intro);
     textSize (70);
     fill(255,255,255);
@@ -110,7 +109,7 @@ public void startScreen()
 }
 
 public void game(){
-  if(random(1) < 0.5f && frameCount % 80 == 0) // Speed and distance
+  if(random(1) < 0.5f && frameCount % 80 == 0) 
   {
     enemies.add(new Enemy()); 
   }
@@ -206,6 +205,7 @@ public void checkForEnemyHitsBullet(Enemy enemy, int currentEnemyInArray){
     if (enemy.hitsBullet(bullets.get(h))){
       bullets.remove(h);
       enemies.remove(currentEnemyInArray);
+      score++;
     }
   } 
 }
@@ -319,7 +319,7 @@ class Enemy
   float speed;
 
   Enemy(){
-    bottom = random(140, 145); 
+    bottom = 140;//random(140, 145); 
     x = widthScreen + width; 
     speed = currentSpeedEnemy;
   }

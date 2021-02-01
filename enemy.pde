@@ -7,7 +7,7 @@ class Enemy
   float speed;
 
   Enemy(){
-    bottom = random(140, 145); 
+    bottom = 140;//random(140, 145); 
     x = widthScreen + width; 
     speed = currentSpeedEnemy;
   }

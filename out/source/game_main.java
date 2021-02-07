@@ -319,7 +319,7 @@ class Enemy
   float speed;
 
   Enemy(){
-    bottom = 140;//random(140, 145); 
+    bottom = 140;
     x = widthScreen + width; 
     speed = currentSpeedEnemy;
   }

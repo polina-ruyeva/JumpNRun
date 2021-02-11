@@ -1,4 +1,5 @@
-class Player{
+class Player
+{
   PVector pos; 
   PVector acc;
   PVector vel; 

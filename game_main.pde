@@ -19,7 +19,7 @@ Gif enemyDeathAnimation;
 PVector gravity = new PVector(0, 0.25);
 
 ArrayList <Enemy> enemies = new ArrayList<Enemy>();  
-ArrayList <Bullet> bullets = new ArrayList<Bullet>();  
+ArrayList <Fireball> fireballs = new ArrayList<Fireball>();  
 
 boolean running = false;
 boolean gameOver = false;
@@ -47,8 +47,9 @@ void setup()
   preload();
 
   time = millis();
+  surface.setTitle("King Santa vs Little Red Devils");
   smooth();
-  strokeWeight(3);
+  strokeWeight(2);
 }
 
 void draw()
@@ -108,7 +109,7 @@ void game(){
 
   if (mousePressed){
     if (timeTillCooldown == 0){ 
-      bullets.add(new Bullet(player_var.pos.x, player_var.pos.y + 40));
+      fireballs.add(new Fireball(player_var.pos.x, player_var.pos.y + 40));
       timeTillCooldown = 15;
       startCountdownTime = millis();
       time = 0;
@@ -135,15 +136,15 @@ void game(){
   player_var.update();
   player_var.show();
   
-  for(int i= bullets.size() - 1; i >= 0; i--){
-    Bullet bllt = bullets.get(i);
+  for(int i= fireballs.size() - 1; i >= 0; i--){
+    Fireball bllt = fireballs.get(i);
     
     bllt.update();
     bllt.show();
 
     if(bllt.x <-bllt.width)
     {
-      bullets.remove(i);
+      fireballs.remove(i);
     }
   }
 
@@ -173,18 +174,16 @@ void game(){
         }
       }    
     } catch (Exception e) {
-      
     } finally {
-      
     }
 
   }
 }
 
 void checkForEnemyHitsBullet(Enemy enemy, int currentEnemyInArray){
-  for(int h= bullets.size() - 1; h >= 0; h--){
-    if (enemy.hitsBullet(bullets.get(h))){
-      bullets.remove(h);
+  for(int h= fireballs.size() - 1; h >= 0; h--){
+    if (enemy.hitsFireball(fireballs.get(h))){
+      fireballs.remove(h);
       enemies.remove(currentEnemyInArray);
       score++;
     }
@@ -259,7 +258,7 @@ void preload(){
   enemyAnimation.play();
 
   backgroundSound = new SoundFile(this, "sound\\Winds Of Stories.wav");
-  backgroundSound.amp(0.1);
+  backgroundSound.amp(0.05);
   backgroundSound.play();
 
   santaIntroAnimation = new Gif(this, "texture\\santa_intro.gif");

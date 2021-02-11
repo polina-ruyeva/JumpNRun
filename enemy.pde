@@ -1,7 +1,6 @@
 class Enemy
 {
   float bottom;
-
   float width = 70;
   float x; 
   float speed;
@@ -17,9 +16,9 @@ class Enemy
     return ((player.pos.x > x) && (player.pos.x < (x + width))) &&  (player.pos.y > (height - bottom - player.r));
   }
 
-  boolean hitsBullet(Bullet bullet)
+  boolean hitsFireball(Fireball fireball)
   {
-    return ((bullet.x > x) && (bullet.x < (x + width))) &&  (bullet.y > (height - bottom - bullet.width));
+    return ((fireball.x > x) && (fireball.x < (x + width))) &&  (fireball.y > (height - bottom - fireball.width));
   }
   
   void update(){
@@ -31,11 +30,6 @@ class Enemy
       stroke(0,0,0);
       strokeWeight(2);
       imageMode(CORNER); 
-      image(enemyAnimation, x, height - bottom, width, bottom - 80);
+      image(enemyAnimation, x, height - bottom, width, 70);
   } 
-
-  void death(){
-    imageMode(CORNER);
-    image(enemyDeathAnimation, x, height - bottom, width, bottom - 80);
-  }
 }

@@ -1,11 +1,11 @@
-class Bullet
+class Fireball
 {
     float x;
     float y;
     float speed = 4;
     float width = 70;
 
-    Bullet(float xpos, float ypos){
+    Fireball(float xpos, float ypos){
         this.x = xpos;
         this.y = ypos;
     }

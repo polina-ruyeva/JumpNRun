@@ -38,7 +38,7 @@ Gif enemyDeathAnimation;
 PVector gravity = new PVector(0, 0.25f);
 
 ArrayList <Enemy> enemies = new ArrayList<Enemy>();  
-ArrayList <Bullet> bullets = new ArrayList<Bullet>();  
+ArrayList <Fireball> fireballs = new ArrayList<Fireball>();  
 
 boolean running = false;
 boolean gameOver = false;
@@ -66,8 +66,9 @@ public void setup()
   preload();
 
   time = millis();
+  surface.setTitle("King Santa vs Little Red Devils!");
   
-  strokeWeight(3);
+  strokeWeight(2);
 }
 
 public void draw()
@@ -127,7 +128,7 @@ public void game(){
 
   if (mousePressed){
     if (timeTillCooldown == 0){ 
-      bullets.add(new Bullet(player_var.pos.x, player_var.pos.y + 40));
+      fireballs.add(new Fireball(player_var.pos.x, player_var.pos.y + 40));
       timeTillCooldown = 15;
       startCountdownTime = millis();
       time = 0;
@@ -154,15 +155,15 @@ public void game(){
   player_var.update();
   player_var.show();
   
-  for(int i= bullets.size() - 1; i >= 0; i--){
-    Bullet bllt = bullets.get(i);
+  for(int i= fireballs.size() - 1; i >= 0; i--){
+    Fireball bllt = fireballs.get(i);
     
     bllt.update();
     bllt.show();
 
     if(bllt.x <-bllt.width)
     {
-      bullets.remove(i);
+      fireballs.remove(i);
     }
   }
 
@@ -192,18 +193,16 @@ public void game(){
         }
       }    
     } catch (Exception e) {
-      
     } finally {
-      
     }
 
   }
 }
 
 public void checkForEnemyHitsBullet(Enemy enemy, int currentEnemyInArray){
-  for(int h= bullets.size() - 1; h >= 0; h--){
-    if (enemy.hitsBullet(bullets.get(h))){
-      bullets.remove(h);
+  for(int h= fireballs.size() - 1; h >= 0; h--){
+    if (enemy.hitsFireball(fireballs.get(h))){
+      fireballs.remove(h);
       enemies.remove(currentEnemyInArray);
       score++;
     }
@@ -278,7 +277,7 @@ public void preload(){
   enemyAnimation.play();
 
   backgroundSound = new SoundFile(this, "sound\\Winds Of Stories.wav");
-  backgroundSound.amp(0.1f);
+  backgroundSound.amp(0.05f);
   backgroundSound.play();
 
   santaIntroAnimation = new Gif(this, "texture\\santa_intro.gif");
@@ -287,33 +286,9 @@ public void preload(){
   enemyDeathAnimation = new Gif(this, "texture\\enemy_death.gif");
   enemyDeathAnimation.play();
 }
-class Bullet
-{
-    float x;
-    float y;
-    float speed = 4;
-    float width = 70;
-
-    Bullet(float xpos, float ypos){
-        this.x = xpos;
-        this.y = ypos;
-    }
-
-    public void update(){
-        x += speed;
-    }
-    
-    public void show(){
-        stroke(0,0,0);
-        strokeWeight(2);
-        imageMode(CORNER); 
-        image(fireball_img, this.x, this.y, this.width, this.width);
-    }
-}
 class Enemy
 {
   float bottom;
-
   float width = 70;
   float x; 
   float speed;
@@ -329,9 +304,9 @@ class Enemy
     return ((player.pos.x > x) && (player.pos.x < (x + width))) &&  (player.pos.y > (height - bottom - player.r));
   }
 
-  public boolean hitsBullet(Bullet bullet)
+  public boolean hitsFireball(Fireball fireball)
   {
-    return ((bullet.x > x) && (bullet.x < (x + width))) &&  (bullet.y > (height - bottom - bullet.width));
+    return ((fireball.x > x) && (fireball.x < (x + width))) &&  (fireball.y > (height - bottom - fireball.width));
   }
   
   public void update(){
@@ -343,15 +318,34 @@ class Enemy
       stroke(0,0,0);
       strokeWeight(2);
       imageMode(CORNER); 
-      image(enemyAnimation, x, height - bottom, width, bottom - 80);
+      image(enemyAnimation, x, height - bottom, width, 70);
   } 
-
-  public void death(){
-    imageMode(CORNER);
-    image(enemyDeathAnimation, x, height - bottom, width, bottom - 80);
-  }
 }
-class Player{
+class Fireball
+{
+    float x;
+    float y;
+    float speed = 4;
+    float width = 70;
+
+    Fireball(float xpos, float ypos){
+        this.x = xpos;
+        this.y = ypos;
+    }
+
+    public void update(){
+        x += speed;
+    }
+    
+    public void show(){
+        stroke(0,0,0);
+        strokeWeight(2);
+        imageMode(CORNER); 
+        image(fireball_img, this.x, this.y, this.width, this.width);
+    }
+}
+class Player
+{
   PVector pos; 
   PVector acc;
   PVector vel; 

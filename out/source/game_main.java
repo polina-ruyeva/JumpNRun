@@ -66,7 +66,7 @@ public void setup()
   preload();
 
   time = millis();
-  surface.setTitle("King Santa vs Little Red Devils!");
+  surface.setTitle("King Santa vs Little Red Devils");
   
   strokeWeight(2);
 }
